@@ -40,8 +40,8 @@ settings = {
 	"port": 9336,
 	"debug": False,
 	"type": 2, # 1 for app 2 for post
-	"url" : "localhost:4251",
-	"page" : "Payment",
+	"url" : "http://localhost",
+	"page" : "api",
 	"app" : "Path"
 }
 
@@ -59,11 +59,13 @@ def new_transaction_event(tx):
 			if settings["type"] == 1:
 				os.system( settings["app"] +" " + txout.address + " " + str(txout.amount));
 			else:
-				try:
-				  conn = httplib.HTTPConnection(settings["url"]);
-				  conn.request("GET","/"+settings["page"]+"?address=" + str(txout.address) + "&amount=" + str(txout.amount));
-				except:
-				  pass #server is probably down
+				#try:
+				  print "Url %s" % settings["url"]
+				  print "/%s" % settings["page"]
+				  conn = httplib.HTTPConnection("127.0.0.1", 8080);
+				  conn.request("GET",settings["url"]+"/"+settings["page"]+"?address=" + str(txout.address) + "&amount=" + str(txout.amount));
+				#except:
+				#  pass #server is probably down
 		
 	else:
 		print "\n - Invalid TX: %s" % tx.hash
